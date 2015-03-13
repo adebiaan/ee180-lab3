@@ -159,7 +159,7 @@ assign      next_col_strip                      = col_strip + `NUM_SOBEL_ACCELER
 // The value of this signal is the termination condition.
 // What is the highest possible value of col_strip that indicates there are still more input pixels to process?
 // Insert your code here.
-assign      max_col_strip                       = control_n_cols - `NUM_SOBEL_ACCELERATORS; 
+assign      max_col_strip                       = control_n_cols - `NUM_SOBEL_ACCELERATORS - 2; 
 
 generate
 for (i = 0; i < `NUM_SOBEL_ACCELERATORS; i = i + 1) begin: sobel_write_en
@@ -222,7 +222,7 @@ always @ (*) begin
                 // Insert your state transition code here.
                 // changed row_counter_next to row_counter in first ternary comparison
                 // t his only works if row_counter is being incremented
-                state_next                      = (row_counter == (control_n_rows-1)-2) ? STATE_PROCESSING_LOADSS_LAST : ((row_counter > (control_n_rows-1)-2) ? STATE_ERROR : STATE_PROCESSING_LOADSS);
+                state_next                      = (row_counter == control_n_rows-3) ? STATE_PROCESSING_LOADSS_LAST : ((row_counter > (control_n_rows-3) ? STATE_ERROR : STATE_PROCESSING_LOADSS);
             end
         end
         
@@ -239,7 +239,7 @@ always @ (*) begin
                 // *** Last-row-in-column-strip calculation state ***
                 // Insert your state transition code here
 
-								state_next = (col_strip == control_n_cols - 4) ? STATE_PROCESSING_DONE : (col_strip < control_n_cols - 4) ? STATE_LOADING_1 : STATE_ERROR;
+								state_next = (col_strip == max_col_strip) ? STATE_PROCESSING_DONE : (col_strip < max_col_strip) ? STATE_LOADING_1 : STATE_ERROR;
             end
         end
         

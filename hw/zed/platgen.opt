@@ -5,7 +5,7 @@ verilog
 -intstyle
 default
 -lp
-/home/zed/ee108z/adv_xps_proj/cf_lib/
+/afs/ir.stanford.edu/users/a/n/antoso/EE180/lab3/hw/zed_lib/
 -msg
 __xps/ise/xmsgprops.lst
 system.mhs

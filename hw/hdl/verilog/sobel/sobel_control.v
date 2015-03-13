@@ -57,12 +57,6 @@ localparam  STATE_PROCESSING_LOADSS_LAST        = 'h7;                          
 localparam  STATE_PROCESSING_DONE               = 'h8;                              // ' completed processing the entire image buffer, waiting for action from the host system
 localparam  STATE_ERROR                         = 'hf;                              // ' an error occurred (should never get here)
 
-//localparam STATE_STALL_1 ='h9;
-localparam STATE_STALL_2 ='ha;
-localparam STATE_STALL_3 ='hb;
-localparam STATE_STALL_LS='hc;
-localparam STATE_STALL_LAST='hd;
-
 // Internal signals
 wire        [STATE_WIDTH-1:0]                   state;                          // state signal, driven by register
 reg         [STATE_WIDTH-1:0]                   state_next;                     // next state signal, drives register
@@ -248,7 +242,7 @@ always @ (*) begin
                 state_next = (col_strip == max_col_strip) ? STATE_PROCESSING_DONE : (col_strip < max_col_strip) ? STATE_LOADING_1 : STATE_ERROR;
             end
         end
-        
+
         STATE_PROCESSING_LOADSS_LAST: begin
             if (go) begin
                 // *** Last-row-in-column loading state ***
@@ -513,7 +507,7 @@ always @ (*) begin
             if (go) begin
                 // Once the control signal is asserted, does something need to happen?
                 // Think about what the next state is going to be and what data the accelerator expects to get.
-                buf_read_offset_next            = 'h0; 
+                buf_read_offset_next            =  control_n_cols + buf_read_offset; 
             end else begin
                 // If there is no control signal, just read from the beginning of the image.
                 // This part is provided for you.
@@ -531,35 +525,41 @@ always @ (*) begin
         STATE_LOADING_2: begin
             // What happens in this state? Insert your code here. If nothing changes, you can remove this case completely.
 			if(go) begin
-                buf_read_offset_next = control_n_cols + buf_read_offset;
+                buf_read_offset_next = buf_read_offset;
             end
         end
         
         STATE_LOADING_3: begin
             // What happens in this state? Insert your code here. If nothing changes, you can remove this case completely.
-			buf_read_offset_next = buf_read_offset;
-        end
+            if(go) begin
+                buf_read_offset_next = control_n_cols + buf_read_offset;
+            end
+  	    end
         
         STATE_PROCESSING_CALC: begin
             // What happens in this state? Insert your code here. If nothing changes, you can remove this case completely.
-			if(go) begin
-                buf_read_offset_next = control_n_cols + buf_read_offset;
-            end
+        	buf_read_offset_next = buf_read_offset;
         end
         
         STATE_PROCESSING_LOADSS: begin
             // What happens in this state? Insert your code here. If nothing changes, you can remove this case completely.
-            buf_read_offset_next  = buf_read_offset;
-        end
+            if(go) begin
+               buf_read_offset_next = control_n_cols + buf_read_offset;
+             end 
+	    end
         
         STATE_PROCESSING_CALC_LAST: begin
             // What happens in this state? Insert your code here. If nothing changes, you can remove this case completely.
-            buf_read_offset_next = buf_read_offset;
+	        if (go) begin
+               buf_read_offset_next = control_n_cols + buf_read_offset;
+       	    end 
         end
         
         STATE_PROCESSING_LOADSS_LAST: begin
             // What happens in this state? Insert your code here. If nothing changes, you can remove this case completely.
-			buf_read_offset_next = col_strip_next;
+	       if (go) begin
+		      buf_read_offset_next = next_col_strip;
+	       end
         end
         
         STATE_PROCESSING_DONE: begin
@@ -718,7 +718,7 @@ always @ (*) begin
         
         default: begin
             // What happens in the default (unexpected) case? Insert your code here. If nothing changes, you can remove this case completely.
-     //       buf_write_en = 1'b0;
+            buf_write_en = 1'b0;
         end
     endcase
 end

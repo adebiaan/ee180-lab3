@@ -85,10 +85,6 @@ generate
             // convx[c]   = 'h0; // ' (to get rid of syntax highlight issues)
             
             //ADDED
-            //convxa[c] = convx11[c]+(convx12[c]<<1)+convx13[c];
-            //convxb[c] = (convxa[c]>convx31[c])?(convxa[c]-convx31[c]):(convx31[c]-convxa[c]);
-            //convxc[c] = (convxb[c]>(convx32[c]<<1))?(convxb[c]-(convx32[c]<<1)):((convx32[c]<<1)-convxb[c]);
-            //convx[c] = (convxc[c]>convx33[c])?(convxc[c]-convx33[c]):(convx33[c]-convxc[c]);
             convxa[c] = convx11[c] + convx12[c] + convx13[c];
 						convxb[c] = convx31[c] + convx32[c] + convx33[c];
 						convx[c] = (convxa[c] > convxb[c]) ? convxa[c] - convxb[c] : convxb[c] - convxa[c];
@@ -110,10 +106,6 @@ generate
             // convy[c]   = 'h0;  // ' (to get rid of syntax highlight issues)
 
             //ADDED
-            //convya[c] = convy11[c]+(convy21[c]<<2)+convy31[c];
-            //convyb[c] = (convya[c]>convy13[c])?(convya[c]-convy13[c]):(convy13[c]-convya[c]); 
-            //convyc[c] = (convyb[c]>(convy23[c]<<2))?(convyb[c]-(convy23[c]<<2)):((convy23[c]<<2)-convyb[c]); 
-            //convy[c] = (convyc[c]>convy33[c])?(convyc[c]-convy33[c]):(convy33[c]-convyc[c]); 
             convya[c] = convy11[c] + convy21[c] + convy31[c];
 						convyb[c] = convy13[c] + convy23[c] + convy33[c];
 						convy[c] = (convya[c] > convyb[c]) ? convya[c] - convyb[c] : convyb[c] - convya[c];

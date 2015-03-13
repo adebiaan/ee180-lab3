@@ -50,6 +50,9 @@ assign      sacc2swt_write_data                 = sobel_out;
 // If you need any extra signals to help with the convolution, declare them here. Otherwise, you may remove these comments.
 // Note that you will need to use "reg" (not "wire") for any signals written to inside the "always" block.
 
+wire [11:0] sobel_sum_0;
+assign sobel_sum_0 = sobel_sum[0];
+
 
 
 // *** Sobel convolution implementation ***
@@ -112,7 +115,7 @@ generate
             //convyc[c] = (convyb[c]>(convy23[c]<<2))?(convyb[c]-(convy23[c]<<2)):((convy23[c]<<2)-convyb[c]); 
             //convy[c] = (convyc[c]>convy33[c])?(convyc[c]-convy33[c]):(convy33[c]-convyc[c]); 
             convya[c] = convy11[c] + convy21[c] + convy31[c];
-						convya[c] = convy13[c] + convy23[c] + convy33[c];
+						convyb[c] = convy13[c] + convy23[c] + convy33[c];
 						convy[c] = (convya[c] > convyb[c]) ? convya[c] - convyb[c] : convyb[c] - convya[c];
             //ADDED
 
@@ -124,6 +127,7 @@ generate
             //need to get magnitude of whole thing (make sure its still positive)
             conv_sum[c] = convx[c]+convy[c];
             sobel_sum[c] = (conv_sum[c] > 12'hff) ? 12'hff : conv_sum[c]; 
+						
             //ADDED
             
             // *** Writing out the Sobel convolution result ***

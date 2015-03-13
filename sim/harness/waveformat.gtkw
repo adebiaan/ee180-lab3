@@ -1,16 +1,21 @@
 [*]
-[*] GTKWave Analyzer v3.3.58 (w)1999-2014 BSI
-[*] Fri Jan  9 20:37:52 2015
+[*] GTKWave Analyzer v3.3.29 (w)1999-2012 BSI
+[*] Fri Mar 13 03:50:16 2015
 [*]
+[dumpfile] "/afs/ir.stanford.edu/users/c/r/crognale/ee180-lab3/sim/tests/basic/streamwave.vcd"
+[dumpfile_mtime] "Fri Mar 13 03:44:07 2015"
+[dumpfile_size] 4547604
+[savefile] "/afs/ir.stanford.edu/users/c/r/crognale/ee180-lab3/sim/harness/waveformat.gtkw"
 [timestart] 0
-[size] 1535 876
-[pos] 1089 370
-*-15.000000 0 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[size] 1440 797
+[pos] 18 0
+*-15.000000 52900 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] userlogic_test.
 [treeopen] userlogic_test.ul.
 [treeopen] userlogic_test.ul.sobel.
-[sst_width] 223
-[signals_width] 210
+[treeopen] userlogic_test.ul.sobel.control.
+[sst_width] 271
+[signals_width] 246
 [sst_expanded] 1
 [sst_vpaned_height] 287
 @200
@@ -46,6 +51,9 @@ userlogic_test.ul.sobel.sctl2srow_row_op[1:0]
 userlogic_test.ul.sobel.srow2sacc_row1_data[31:0]
 userlogic_test.ul.sobel.srow2sacc_row2_data[31:0]
 userlogic_test.ul.sobel.srow2sacc_row3_data[31:0]
-@28
+@23
+userlogic_test.ul.sobel.control.row_counter[9:0]
+@22
+userlogic_test.ul.sobel.control.control_n_rows[9:0]
 [pattern_trace] 1
 [pattern_trace] 0

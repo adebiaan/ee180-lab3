@@ -1,2 +1,55 @@
-TODO: Write your lab report here. See the handout for more information.
-# ee180-lab3
+sobel_accelerator.c 
+###################
+
+On a high level, we calculate the x- and y-convolutions in convx[c] and
+convy[c], outputting their sum (or 255 if the sum is greater than 255).
+
+To calculate the x convolution, we store the sum of the positive terms of the
+convolution in convxa[c], and the positive sum of the negative terms in
+convxb[c]. To get the absolute value of their difference, we make sure that
+convx[c] is defined as the larger of convxa and convxb subtracted by the
+smaller of the two. We follow the same procedure for the y convolution.
+
+
+sobel_control.v
+###############
+
+For state_next, the general flow is as follows:
+ 
+          -------------------------------------------------------------------
+          |                                                                 |
+          v                                                                 |
+WAIT -> LOADING_1 -> LOADING_2 -> LOADING_3 -> PROCESSING_CALC <--          |
+-----------------------------------------------------------------|          |
+|                            |                                              |
+v                            v                                              |
+PROCESSING_LOADSS            PROCESSING_LOADSS_LAST -> PROCESSING_CALC_LAST ---
+                                                                            | |
+                                            ERROR <-------------------------- v
+                                                                PROCESSING_DONE
+
+In STATE_PROCESSING_CALC_LAST, we transition to STATE_PROCESSING_DONE if the 
+current col_strip is the maximum allowable col_strip for the image.
+
+For row_op, we choose SOBEL_ROW_OP_SHIFT_ROW for all of the LOAD states and
+SOBEL_ROW_OP_HOLD for the other states.
+
+We increment row_counter_next in STATE_LOADING_3, STATE_PROCESSING_LOADSS, and
+STATE_PROCESSING_LOADSS_LAST, and reset it in STATE_PROCESSING_CALC_LAST.
+
+col_strip_next is incremented only in STATE_PROCESSING_CALC_LAST,
+and is reset in STATE_PROCESSING_DONE.
+
+buf_read_offset is incremented by control_n_cols and is initialized to 0
+by the WAIT stage (and reset to next_col_strip in LOADSS_LAST). Taking into
+account the read delay, we increment buf_read_offset_next by control_n_cols
+in every state except STATE_PROCESSING_LOADSS_LAST and STATE_PROCESSING_DONE,
+where we reset it to 0 in preparation for the next frame.
+
+buf_write_offset is initialized to col_strip_next in STATE_LOADING_3, and
+incremented by control_n_cols - 2 in STATE_PROCESSING_LOADSS and 
+STATE_PROCESSING_LOADSS_LAST.
+
+
+buf_write_en is enabled in STATE_PROCESSING_CALC (taking into account the
+delay) and STATE_PROCESSING_CALC_LAST.
